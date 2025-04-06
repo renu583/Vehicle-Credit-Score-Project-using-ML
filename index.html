@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vehicle Credit Score</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; background-color: #f4f4f4; }
+    h1 { color: #333; }
+    input, select, button { margin: 0.5rem 0; padding: 0.5rem; width: 100%; }
+    .container { max-width: 500px; margin: auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 0 10px #ccc; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚗 Vehicle Credit Score</h1>
+
+    <h3>Register Vehicle</h3>
+    <input type="text" id="vehicle_number" placeholder="Vehicle Number (e.g. MH12AB1234)" />
+    <input type="text" id="owner_name" placeholder="Owner Name" />
+    <button onclick="registerVehicle()">Register</button>
+
+    <h3>Report Violation</h3>
+    <select id="violation_type">
+      <option value="">Select Violation</option>
+      <option value="overspeeding">Overspeeding</option>
+      <option value="signal_jumping">Signal Jumping</option>
+      <option value="drunk_driving">Drunk Driving</option>
+      <option value="triple_riding">Triple Riding</option>
+      <option value="no_helmet_seatbelt">No Helmet/Seatbelt</option>
+      <option value="no_violation_month">No Violation This Month</option>
+      <option value="fine_paid_on_time">Fine Paid on Time</option>
+    </select>
+    <input type="text" id="violation_vehicle" placeholder="Vehicle Number" />
+    <button onclick="reportViolation()">Report Violation</button>
+
+    <h3>Check Credit Score</h3>
+    <input type="text" id="score_vehicle" placeholder="Vehicle Number" />
+    <button onclick="checkScore()">Check Score</button>
+    <p id="score_result"></p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
