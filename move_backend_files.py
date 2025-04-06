@@ -1,7 +1,7 @@
 import os
 import shutil
 
-source_folder = "backend"
+source_folder = "vehicle-credit-score"
 destination_folder = "."
 
 def move_all_files(src, dst):
