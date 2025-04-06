@@ -1,4 +1,4 @@
-HEAD
+
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import os
@@ -156,7 +156,7 @@ import os
 from flask import Flask, request,render_template, jsonify
 import joblib
 import numpy as np
-from route.gamification import gamification_bp
+from gamification import gamification_bp
 
  # Your gamification blueprint
 import os
@@ -210,4 +210,4 @@ def predict():
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
     
-d7193bf0251f173eaf96a54acb896245d309cb0d
+
