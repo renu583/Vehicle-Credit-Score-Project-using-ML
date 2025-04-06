@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vehicle Credit Score</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; background-color: #f4f4f4; }
+    h1 { color: #974c4c; }
+    input, select, button { margin: 0.5rem 0; padding: 0.5rem; width: 100%; }
+    .container { max-width: 500px; margin: auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 0 10px #ccc; }
+    #score_result { font-weight: bold; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚗 Vehicle Credit Score</h1>
+
+    <h3>Register Vehicle</h3>
+    <input type="text" id="vehicle_number" placeholder="Vehicle Number (e.g. MH12AB1234)" />
+    <input type="text" id="owner_name" placeholder="Owner Name" />
+    <button onclick="registerVehicle()">Register</button>
+
+    <h3>Report Violation</h3>
+    <select id="violation_type">
+      <option value="">Select Violation</option>
+      <option value="overspeeding">Overspeeding</option>
+      <option value="signal_jumping">Signal Jumping</option>
+      <option value="drunk_driving">Drunk Driving</option>
+      <option value="triple_riding">Triple Riding</option>
+      <option value="no_helmet_seatbelt">No Helmet/Seatbelt</option>
+      <option value="no_violation_month">No Violation This Month</option>
+      <option value="fine_paid_on_time">Fine Paid on Time</option>
+    </select>
+    <input type="text" id="violation_vehicle" placeholder="Vehicle Number" />
+    <button onclick="reportViolation()">Report Violation</button>
+
+    <h3>Check Credit Score</h3>
+    <input type="text" id="score_vehicle" placeholder="Vehicle Number" />
+    <button onclick="checkScore()">Check Score</button>
+    <p id="score_result"></p>
+  </div>
+
+  <script>
+    const API_BASE = "http://127.0.0.1:5001";
+
+    async function registerVehicle() {
+      const vehicle_number = document.getElementById("vehicle_number").value.trim();
+      const owner_name = document.getElementById("owner_name").value.trim();
+
+      if (!vehicle_number || !owner_name) {
+        alert("Please enter both vehicle number and owner name.");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/register_vehicle`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ vehicle_number, owner_name }),
+        });
+
+        const data = await res.json();
+        alert(data.message || "Vehicle registered successfully.");
+      } catch (err) {
+        alert("Failed to register vehicle. Server error.");
+        console.error(err);
+      }
+    }
+
+    async function reportViolation() {
+      const vehicle_number = document.getElementById("violation_vehicle").value.trim();
+      const violation_type = document.getElementById("violation_type").value;
+
+      if (!vehicle_number || !violation_type) {
+        alert("Please select a violation type and enter vehicle number.");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/report_violation`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ vehicle_number, violation_type }),
+        });
+
+        const data = await res.json();
+        alert(data.message || "Violation reported successfully.");
+      } catch (err) {
+        alert("Failed to report violation. Server error.");
+        console.error(err);
+      }
+    }
+
+    async function checkScore() {
+      const vehicle_number = document.getElementById("score_vehicle").value.trim();
+
+      if (!vehicle_number) {
+        alert("Please enter a vehicle number.");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/predict_score/${vehicle_number}`);
+        const data = await res.json();
+
+        if (data.credit_score !== undefined) {
+          document.getElementById("score_result").innerText = `Credit Score: ${data.credit_score}`;
+        } else if (data.error) {
+          document.getElementById("score_result").innerText = data.error;
+        } else {
+          document.getElementById("score_result").innerText = "Vehicle not found or score unavailable.";
+        }
+      } catch (err) {
+        document.getElementById("score_result").innerText = "Error fetching score.";
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
